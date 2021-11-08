@@ -33,9 +33,9 @@ class VideoCore(RequestCore):
             raise Exception('ERROR: Invalid status code.')
 
     def sync_create(self):
-        self.resp2=self.response
         response = self.syncGetRequest()
         self.response = response.text
+        self.resp2=self.response
         if response.status_code == 200:
             self.post_request_processing()
         else:
