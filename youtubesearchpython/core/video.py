@@ -5,7 +5,7 @@ import re
 from youtubesearchpython.core.constants import *
 from youtubesearchpython.core.requests import RequestCore
 from youtubesearchpython.core.componenthandler import getValue, getVideoId
-
+from youtubesearchpython.core.playlist import InvalidStatusException
 
 class VideoCore(RequestCore):
     def __init__(self, videoLink: str, componentMode: str, resultMode: int, timeout: int):
@@ -30,7 +30,7 @@ class VideoCore(RequestCore):
         if response.status_code == 200:
             self.post_request_processing()
         else:
-            raise Exception('ERROR: Invalid status code.')
+            raise InvalidStatusException('ERROR: Invalid status code.')
 
     def sync_create(self):
         response = self.syncGetRequest()
@@ -39,7 +39,7 @@ class VideoCore(RequestCore):
         if response.status_code == 200:
             self.post_request_processing()
         else:
-            raise Exception('ERROR: Invalid status code.')
+            raise InvalidStatusException(f'ERROR: Invalid status code.{response.status_code}')
     def __getLikes(self):
         resp=self.resp2
         sentiment=re.search("sentimentBar", resp)

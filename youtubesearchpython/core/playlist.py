@@ -6,7 +6,8 @@ from urllib.request import Request, urlopen
 
 from youtubesearchpython.core.constants import *
 from youtubesearchpython.core.requests import RequestCore
-
+class InvalidStatusException(Exception):
+    pass
 class PlaylistCore(RequestCore):
     playlistComponent = None
     result = None
@@ -33,7 +34,7 @@ class PlaylistCore(RequestCore):
         if statusCode == 200:
             self.post_processing()
         else:
-            raise Exception('ERROR: Invalid status code.')
+            raise InvalidStatusException('ERROR: Invalid status code.')
 
     async def async_create(self):
         # Why do I use sync request in a async function, you might ask
@@ -43,7 +44,7 @@ class PlaylistCore(RequestCore):
         if statusCode == 200:
             self.post_processing()
         else:
-            raise Exception('ERROR: Invalid status code.')
+            raise InvalidStatusException('ERROR: Invalid status code.')
 
     def next_post_processing(self):
         self.__parseSource()
@@ -61,7 +62,7 @@ class PlaylistCore(RequestCore):
             if statusCode.status_code == 200:
                 self.next_post_processing()
             else:
-                raise Exception('ERROR: Invalid status code.')
+                raise InvalidStatusException('ERROR: Invalid status code.')
 
     async def _async_next(self):
         if self.continuationKey:
@@ -71,7 +72,7 @@ class PlaylistCore(RequestCore):
             if statusCode.status_code == 200:
                 self.next_post_processing()
             else:
-                raise Exception('ERROR: Invalid status code.')
+                raise InvalidStatusException('ERROR: Invalid status code.')
         else:
             await self.async_create()
 
